@@ -5,13 +5,9 @@
 
 namespace racketlike::sexp {
 
-Atom::Atom(std::string value) : value(value) {}
-
 std::ostream &operator<<(std::ostream &os, const Atom &atom) {
   return os << atom.value;
 }
-
-Exp::Exp(std::vector<SExp> sexps) : sexps(sexps) {}
 
 std::ostream &operator<<(std::ostream &os, const Exp &exp) {
   os << "(";
@@ -21,6 +17,11 @@ std::ostream &operator<<(std::ostream &os, const Exp &exp) {
     os << *it;
   }
   return os << ")";
+}
+
+std::ostream &operator<<(std::ostream &os, const SExp &variant) {
+  std::visit([&os](auto &&value) { os << value; }, variant);
+  return os;
 }
 
 std::string_view skipWhiteSpace(std::string_view str) {

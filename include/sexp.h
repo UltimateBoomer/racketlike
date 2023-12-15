@@ -12,38 +12,24 @@ namespace racketlike::sexp {
 
 struct Atom;
 struct Exp;
-/* struct SExp; */
-
-/* struct SExp { */
-/*   virtual ~SExp() = default; */
-/**/
-/*   virtual std::ostream &print(std::ostream &os) const = 0; */
-/* }; */
 
 using SExp = std::variant<Atom, Exp>;
 
-template <typename... Types>
-std::ostream &operator<<(std::ostream &os,
-                         const std::variant<Types...> &variant) {
-  std::visit([&os](const auto &value) { os << value; }, variant);
-  return os;
-}
+/* template <typename... Types> */
 
 struct Atom {
   std::string value;
-
-  Atom(std::string value);
 };
 
 std::ostream &operator<<(std::ostream &os, const Atom &atom);
 
 struct Exp {
   std::vector<SExp> sexps;
-
-  Exp(std::vector<SExp> sexps);
 };
 
 std::ostream &operator<<(std::ostream &os, const Exp &exp);
+
+std::ostream &operator<<(std::ostream &os, const SExp &variant);
 
 class ParseError : public std::runtime_error {
 public:
